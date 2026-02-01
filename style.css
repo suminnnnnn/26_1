@@ -33,7 +33,7 @@
 
 /* 2. 메인 컨텐츠를 화면 전체로 설정 */
 .main-content {
-  padding: 50px 20px 0 20px;
+  padding: 100px 20px 0 20px;
   position: relative;
   width: 100%;
   /* 100vh 대신 100dvh를 사용하면 아이폰 주소창을 제외한 '진짜 보이는 화면' 높이만 잡습니다. */
