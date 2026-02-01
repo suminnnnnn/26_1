@@ -1,39 +1,68 @@
-/* 1. 기본 설정 */
+/* 1. 기본 설정은 그대로 */
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
-/* 2. 전체 배경 (PC 화면 전체) */
-.desktop-background {
+
+/* 기본적으로 안내창은 숨겨둠 */
+#mobile-only-overlay {
+  padding: 100px;
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 99999; /* 모든 요소보다 위에 배치 */
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+/* 화면 너비가 768px 이상(데스크탑)일 때만 안내창을 보여줌 */
+@media (min-width: 768px) {
+    #mobile-only-overlay {
+        display: flex;
+    }
+    /* 데스크탑에서 배경이나 다른 요소가 보이지 않게 본문을 숨기고 싶다면 */
+    .desktop-background {
+        display: none !important;
+    }
+}
+
+/* 메시지 박스 꾸미기 */
+.message-box p {
+    font-size: 1.2rem;
+    line-height: 1.6;
+    color: #333;
+    margin-top: 20px;
+}
+
+/* 2. 메인 컨텐츠를 화면 전체로 설정 */
+.main-content {
+  position: relative;
   width: 100%;
-  height: 100vh;
+  height: 100vh; /* 실제 핸드폰 화면 높이를 꽉 채움 */
   background: linear-gradient(165deg, #73ff6e 0%, #84ffea 90%);
-  background-size: cover;
-  background-position: center;
   display: flex;
   justify-content: center;
   align-items: center;
   overflow: hidden;
 }
 
-/* 3. 핸드폰 화면 (비율 유지) */
-.phone-container {
-  height: 90vh; 
-  aspect-ratio: 9 / 16; 
-  min-width: 320px; 
-  min-height: 568px;
-
-  position: relative;
-  overflow: hidden; /* 내부 요소가 폰 밖으로 나가지 않게 */
-  flex-shrink: 0; 
+/* 3. 요소들 배치 (이미 absolute이므로 그대로 유지하되 위치만 살짝 조정) */
+.main-ear, .main-logo, .ear-bg {
+  position: absolute;
+  left: 50%;
+  width: 80%; /* 폰 가로 너비에 맞춰 자동 조절됨 */
 }
 
-/* 4. 메인 컨텐츠 영역 (부모) */
-.main-content {
-  position: relative;
-  width: 100%;
-  height: 100%; /* 부모인 phone-container의 높이를 그대로 따라감 */
-  display: flex;
-  justify-content: center;
-  align-items: center;
+/* 4. 위치값 (기존 퍼센트 수치는 유지하면서 세밀하게 조정 가능) */
+.main-ear { transform: translate(-50%, -25%); z-index: 2; }
+.main-logo { transform: translate(-50%, -180%); z-index: 3; }
+.ear-bg { 
+  transform: translate(-50%, -32%); 
+  width: 100%; 
+  z-index: 1; 
 }
 /* 5. 공통 이미지 설정 (중앙 고정용) */
 .main-ear, .main-logo {
@@ -49,15 +78,27 @@
 .main-ear {
   /* translateX(-50%)는 가로 중앙 고정 마법의 코드입니다. */
   /* 뒤의 -50px, -20px 등으로 위치를 살짝 비틀 수 있어요. */
-  transform: translate(-50%, -25%); 
-  /* 만약 가로로 살짝 비키게 하고 싶다면 -50%에서 수치를 더하거나 빼세요. 
-     예: translate(calc(-50% - 50px), -20px) */
+  transform: translate(-48%, -27%); 
+position: absolute; 
+  left: 50%;
+  /* [이 부분을 수정하세요] */
+  width: 85%;           /* 폰 화면 너비의 95%까지 차지하게 확대 */
+  max-width: 450px;     /* 최대 크기 제한도 함께 늘려줘야 시원하게 커집니다 */
+  height: auto;
 }
 
 /* 7. 로고 이미지: 가로 중앙 유지 + 미세 조정 */
 .main-logo {
-  /* 로고도 가로 중앙(-50%)을 잡고 위로(-80px)만 올립니다. */
-  transform: translate(-50%, -180%);
+  transform: translate(-50%, -165%);
+  position: absolute; 
+  left: 50%;
+  
+  /* [이 부분을 수정하세요] */
+  width: 95%;           /* 폰 화면 너비의 95%까지 차지하게 확대 */
+  max-width: 500px;     /* 최대 크기 제한도 함께 늘려줘야 시원하게 커집니다 */
+  
+  height: auto;
+  z-index: 3;
 }
 
 /* 8. 타이틀 설정 */
