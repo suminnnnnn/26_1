@@ -28,7 +28,7 @@
 
 /* [5] 귀 세트 (귀 + 귀 배경) */
 .ear-group {
-  top: 210px;          /* 로고와 겹치지 않는 시작점 */
+  top: 170px;          /* 로고와 겹치지 않는 시작점 */
   width: 90%;          /* 화면 대비 비율 */
   max-width: 380px;
   display: flex;
