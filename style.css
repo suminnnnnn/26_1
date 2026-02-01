@@ -5,7 +5,7 @@
 .desktop-background {
   width: 100%;
   height: 100vh;
-  background-image: url('asset/images/bg.jpg');
+  background: linear-gradient(165deg, #73ff6e 0%, #84ffea 90%);
   background-size: cover;
   background-position: center;
   display: flex;
@@ -20,7 +20,7 @@
   aspect-ratio: 9 / 16; 
   min-width: 320px; 
   min-height: 568px;
- background: linear-gradient(165deg, #73ff6e 0%, #84ffea 90%);
+
   position: relative;
   overflow: hidden; /* 내부 요소가 폰 밖으로 나가지 않게 */
   flex-shrink: 0; 
