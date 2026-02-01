@@ -2,30 +2,25 @@
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 
-/* 기본적으로 안내창은 숨겨둠 */
+/* 데스크탑 안내 레이어를 공중에 띄우기 */
 #mobile-only-overlay {
-  padding: 100px;
-    display: none;
-    position: fixed;
+    display: none; /* 일단 숨김 */
+    position: fixed; /* 중요: 화면에 고정시켜서 아래 요소들을 밀어내지 않게 함 */
     top: 0;
     left: 0;
-    width: 100vw;
+    width: 100%;
     height: 100vh;
-    z-index: 99999; /* 모든 요소보다 위에 배치 */
+    background: linear-gradient(165deg, #73ff6e 0%, #84ffea 90%);
+    z-index: 9999;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    text-align: center;
 }
 
-/* 화면 너비가 768px 이상(데스크탑)일 때만 안내창을 보여줌 */
+/* 데스크탑(768px 이상)일 때만 나타나게 설정 */
 @media (min-width: 768px) {
     #mobile-only-overlay {
-        display: flex;
-    }
-    /* 데스크탑에서 배경이나 다른 요소가 보이지 않게 본문을 숨기고 싶다면 */
-    .desktop-background {
-        display: none !important;
+        display: flex; /* 데스크탑에서만 짠! 하고 나타나서 화면을 덮음 */
     }
 }
 
@@ -33,8 +28,7 @@
 .message-box p {
     font-size: 1.2rem;
     line-height: 1.6;
-    color: #333;
-    margin-top: 20px;
+    color: #000000;
 }
 
 /* 2. 메인 컨텐츠를 화면 전체로 설정 */
