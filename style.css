@@ -1,122 +1,73 @@
-/* 1. 기본 설정은 그대로 */
+/* 1. 기본 설정 */
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
+/* 2. 전체 레이아웃 (모바일 최적화) */
+.main-content {
+  position: relative;
+  width: 100%;
+  height: 100dvh; 
+  background: linear-gradient(165deg, #73ff6e 0%, #84ffea 90%);
+  overflow: hidden;
+}
 
-/* 데스크탑 안내 레이어를 공중에 띄우기 */
+/* 3. 공통 스타일: 가로 중앙 정렬 공식 */
+.main-logo, .ear-group, .main-title {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%); /* 무조건 가로 정중앙 */
+}
+
+/* 4. 메인 로고: 상단에서 50px 고정 */
+.main-logo {
+  top: 50px; /* 원하는 만큼 숫자로 조절 가능 */
+  width: 90%;
+  max-width: 500px;
+  z-index: 10;
+}
+
+/* 5. 귀 세트 (귀 + 귀 배경) */
+.ear-group {
+  top: 280px; /* 로고보다 아래에 위치하도록 설정 (조절 가능) */
+  width: 100%;
+  max-width: 500px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* 귀 세트 내부의 이미지들 */
+.ear-bg {
+  width: 100%;
+  z-index: 1;
+}
+
+.main-ear {
+  position: absolute; /* 배경 위에 겹치기 위해 */
+  width: 85%;
+  z-index: 2;
+  /* 귀 배경이랑 미세하게 어긋난다면 여기서 조절 */
+  transform: translateY(10px); 
+}
+
+/* 6. 타이틀 */
+.main-title {
+  bottom: 15%;
+  font-size: 2.5rem;
+  z-index: 20;
+}
+
+/* [기존 데스크탑 안내 레이어 코드는 그대로 유지하세요] */
 #mobile-only-overlay {
     display: none; 
-    position: fixed; /* absolute 대신 fixed를 써야 화면을 덮고 메인을 안 밀어냅니다. */
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100dvh;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100dvh;
     background-color: #ffffff;
     z-index: 9999;
     flex-direction: column;
     justify-content: center;
     align-items: center;
 }
-
-/* 데스크탑(768px 이상)일 때만 나타나게 설정 */
 @media (min-width: 768px) {
-    #mobile-only-overlay {
-        display: flex; /* 데스크탑에서만 짠! 하고 나타나서 화면을 덮음 */
-    }
-}
-
-/* 메시지 박스 꾸미기 */
-.message-box p {
-    font-size: 1.2rem;
-    line-height: 1.6;
-    color: #000000;
-}
-
-/* 2. 메인 컨텐츠를 화면 전체로 설정 */
-.main-content {
-  padding: 200px 20px 0 20px;
-  position: relative;
-  width: 100%;
-  /* 100vh 대신 100dvh를 사용하면 아이폰 주소창을 제외한 '진짜 보이는 화면' 높이만 잡습니다. */
-  height: 100dvh; 
-  background: linear-gradient(165deg, #73ff6e 0%, #84ffea 90%);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden; /* 스크롤 절대 방지 */
-}
-
-/* 3. 요소들 배치 (이미 absolute이므로 그대로 유지하되 위치만 살짝 조정) */
-.main-ear, .main-logo, .ear-bg {
-  position: absolute;
-  left: 50%;
-  width: 80%; /* 폰 가로 너비에 맞춰 자동 조절됨 */
-}
-
-/* 4. 위치값 (기존 퍼센트 수치는 유지하면서 세밀하게 조정 가능) */
-.main-ear { transform: translate(-50%, -25%); z-index: 2; }
-.main-logo { transform: translate(-50%, -180%); z-index: 3; }
-.ear-bg { 
-  transform: translate(-50%, -32%); 
-  width: 100%; 
-  z-index: 1; 
-}
-/* 5. 공통 이미지 설정 (중앙 고정용) */
-.main-ear, .main-logo {
-  position: absolute; 
-  left: 50%;           /* 부모(폰)의 왼쪽에서 50% 지점으로 이동 */
-  width: 80%; 
-  max-width: 350px;
-  height: auto;
-  z-index: 1;
-}
-
-/* 6. 귀 이미지: 가로 중앙 유지 + 미세 조정 */
-.main-ear {
-  /* translateX(-50%)는 가로 중앙 고정 마법의 코드입니다. */
-  /* 뒤의 -50px, -20px 등으로 위치를 살짝 비틀 수 있어요. */
-  transform: translate(-48%, -27%); 
-position: absolute; 
-  left: 50%;
-  /* [이 부분을 수정하세요] */
-  width: 85%;           /* 폰 화면 너비의 95%까지 차지하게 확대 */
-  max-width: 450px;     /* 최대 크기 제한도 함께 늘려줘야 시원하게 커집니다 */
-  height: auto;
-}
-
-/* 7. 로고 이미지: 가로 중앙 유지 + 미세 조정 */
-.main-logo {
-  transform: translate(-50%, -165%);
-  position: absolute; 
-  left: 50%;
-  
-  /* [이 부분을 수정하세요] */
-  width: 95%;           /* 폰 화면 너비의 95%까지 차지하게 확대 */
-  max-width: 500px;     /* 최대 크기 제한도 함께 늘려줘야 시원하게 커집니다 */
-  
-  height: auto;
-  z-index: 3;
-}
-
-/* 8. 타이틀 설정 */
-.main-title {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%); /* 글자도 가로 중앙 고정 */
-  bottom: 20%;
-  z-index: 2;
-  font-size: 2rem;
-  white-space: nowrap; /* 글자가 옆으로 퍼지지 않게 함 */
-}
-
-/* 9. 귀 배경 이미지 (귀 뒤에 위치) */
-.ear-bg {
-  position: absolute;
-  left: 50%;
-  top: 50%;            /* 세로도 일단 중앙에 배치 */
-  transform: translate(-50%, -32%); /* 화면 정중앙 고정 */
-  width: 100%;         /* 귀보다 크게 설정 (원하는 대로 조절) */
-  max-width: 500px;
-  height: auto;
-  z-index: 0;          /* 귀(z-index: 1)보다 낮게 설정하여 뒤로 보냄 */
-  pointer-events: none; /* 배경이라 클릭 방해 안 되게 설정 */
+    #mobile-only-overlay { display: flex; }
 }
