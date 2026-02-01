@@ -1,62 +1,63 @@
-/* 1. 기본 설정 */
+/* [1] 기본 초기화 */
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
-/* 2. 전체 레이아웃 (모바일 최적화) */
+/* [2] 메인 배경 설정 */
 .main-content {
   position: relative;
   width: 100%;
-  height: 100dvh; 
+  height: 100dvh; /* 아이폰 주소창 고려한 동적 높이 */
   background: linear-gradient(165deg, #73ff6e 0%, #84ffea 90%);
-  overflow: hidden;
+  overflow: hidden; /* 스크롤 방지 */
 }
 
-/* 3. 공통 스타일: 가로 중앙 정렬 공식 */
+/* [3] 공통: 가로 중앙 정렬 공식 */
 .main-logo, .ear-group, .main-title {
   position: absolute;
   left: 50%;
-  transform: translateX(-50%); /* 무조건 가로 정중앙 */
+  transform: translateX(-50%); 
 }
 
-/* 4. 메인 로고: 상단에서 50px 고정 */
+/* [4] 메인 로고: 노치를 피해서 상단 배치 */
 .main-logo {
-  top: 50px; /* 원하는 만큼 숫자로 조절 가능 */
-  width: 90%;
-  max-width: 500px;
+  top: 60px;           /* 아이폰 상단 여유 공간 */
+  width: 80%;          /* 화면 너비의 80% (유연함) */
+  max-width: 320px;    /* 너무 커지지 않게 제한 */
+  height: auto;
   z-index: 10;
 }
 
-/* 5. 귀 세트 (귀 + 귀 배경) */
+/* [5] 귀 세트 (귀 + 귀 배경) */
 .ear-group {
-  top: 280px; /* 로고보다 아래에 위치하도록 설정 (조절 가능) */
-  width: 100%;
-  max-width: 500px;
+  top: 210px;          /* 로고와 겹치지 않는 시작점 */
+  width: 90%;          /* 화면 대비 비율 */
+  max-width: 380px;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-/* 귀 세트 내부의 이미지들 */
 .ear-bg {
-  width: 100%;
+  width: 100%;         /* group 너비에 꽉 차게 */
   z-index: 1;
 }
 
 .main-ear {
-  position: absolute; /* 배경 위에 겹치기 위해 */
-  width: 85%;
+  position: absolute;  /* 배경 위에 겹치기 */
+  width: 80%;          /* 배경보다 살짝 작게 */
   z-index: 2;
-  /* 귀 배경이랑 미세하게 어긋난다면 여기서 조절 */
-  transform: translateY(10px); 
+  /* 가로 중앙 유지 + 세로 미세 조정 필요시 0 부분을 수정 */
+  transform: translate(0%, -3%); 
 }
 
-/* 6. 타이틀 */
+/* [6] 하단 타이틀: 주소창 위로 배치 */
 .main-title {
-  bottom: 15%;
-  font-size: 2.5rem;
+  bottom: 80px;        /* 화면 하단에서 80px 띄움 */
+  font-size: 1.8rem;   /* 모바일에 적당한 크기 */
+  white-space: nowrap;
   z-index: 20;
 }
 
-/* [기존 데스크탑 안내 레이어 코드는 그대로 유지하세요] */
+/* [7] PC 접속 시 안내 레이어 (기존 동일) */
 #mobile-only-overlay {
     display: none; 
     position: fixed;
