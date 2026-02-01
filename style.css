@@ -1,0 +1,85 @@
+/* 1. 기본 설정 */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+/* 2. 전체 배경 (PC 화면 전체) */
+.desktop-background {
+  width: 100%;
+  height: 100vh;
+  background-image: url('asset/images/bg.jpg');
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+/* 3. 핸드폰 화면 (비율 유지) */
+.phone-container {
+  height: 90vh; 
+  aspect-ratio: 9 / 16; 
+  min-width: 320px; 
+  min-height: 568px;
+  background: rgb(187, 255, 182);
+  position: relative;
+  overflow: hidden; /* 내부 요소가 폰 밖으로 나가지 않게 */
+  flex-shrink: 0; 
+}
+
+/* 4. 메인 컨텐츠 영역 (부모) */
+.main-content {
+  position: relative;
+  width: 100%;
+  height: 100%; /* 부모인 phone-container의 높이를 그대로 따라감 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+/* 5. 공통 이미지 설정 (중앙 고정용) */
+.main-ear, .main-logo {
+  position: absolute; 
+  left: 50%;           /* 부모(폰)의 왼쪽에서 50% 지점으로 이동 */
+  width: 80%; 
+  max-width: 350px;
+  height: auto;
+  z-index: 1;
+}
+
+/* 6. 귀 이미지: 가로 중앙 유지 + 미세 조정 */
+.main-ear {
+  /* translateX(-50%)는 가로 중앙 고정 마법의 코드입니다. */
+  /* 뒤의 -50px, -20px 등으로 위치를 살짝 비틀 수 있어요. */
+  transform: translate(-50%, -25%); 
+  /* 만약 가로로 살짝 비키게 하고 싶다면 -50%에서 수치를 더하거나 빼세요. 
+     예: translate(calc(-50% - 50px), -20px) */
+}
+
+/* 7. 로고 이미지: 가로 중앙 유지 + 미세 조정 */
+.main-logo {
+  /* 로고도 가로 중앙(-50%)을 잡고 위로(-80px)만 올립니다. */
+  transform: translate(-50%, -180%);
+}
+
+/* 8. 타이틀 설정 */
+.main-title {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%); /* 글자도 가로 중앙 고정 */
+  bottom: 20%;
+  z-index: 2;
+  font-size: 2rem;
+  white-space: nowrap; /* 글자가 옆으로 퍼지지 않게 함 */
+}
+
+/* 9. 귀 배경 이미지 (귀 뒤에 위치) */
+.ear-bg {
+  position: absolute;
+  left: 50%;
+  top: 50%;            /* 세로도 일단 중앙에 배치 */
+  transform: translate(-50%, -32%); /* 화면 정중앙 고정 */
+  width: 100%;         /* 귀보다 크게 설정 (원하는 대로 조절) */
+  max-width: 500px;
+  height: auto;
+  z-index: 0;          /* 귀(z-index: 1)보다 낮게 설정하여 뒤로 보냄 */
+  pointer-events: none; /* 배경이라 클릭 방해 안 되게 설정 */
+}

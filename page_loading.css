@@ -1,0 +1,38 @@
+.intro {
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  z-index: 9999; display: flex; justify-content: center; align-items: center;
+  background: transparent; /* 배경을 투명하게 */
+  overflow: hidden;
+}
+
+.hole {
+  position: absolute;
+  width: 0px; height: 0px; /* 처음엔 구멍 크기 0 */
+  border-radius: 50%;
+  /* 핵심: 아주 거대한 흰색 그림자로 화면을 다 덮어버립니다 */
+  box-shadow: 0 0 0 200vw #ffffff; 
+  /* [추가] 요소 전체를 흐리게 만듭니다. 숫자를 키울수록 더 뽀샤시해집니다. */
+  filter: blur(10px); 
+  
+  /* 브라우저 최적화 */
+  will-change: width, height;
+  
+  transition: width 1.3s ease-in-out, height 1.3s ease-in-out;
+  z-index: -1;
+}
+
+/* 3초 뒤: 구멍이 화면보다 커지면서 흰 그림자를 밖으로 밀어냅니다 */
+.intro.finished .hole {
+  width: 300vw;
+  height: 300vw;
+}
+
+.intro.finished .loading-img {
+  opacity: 0;
+  transition: 0.65s;
+}
+
+.loading-img {
+  width: 200px;  /* 숫자를 키우면 로고가 커지고, 줄이면 작아집니다 */
+  height: auto;  /* 비율 유지 */
+}
