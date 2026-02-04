@@ -74,11 +74,14 @@ cubics.forEach((cubic) => {
         element: cubic,
         x: startX,
         y: startY,
-        vx: (Math.random() - 0.5) * 5,
-        vy: (Math.random() - 0.5) * 5,
+        vx: (Math.random() - 0.5) * 4,
+        vy: (Math.random() - 0.5) * 4,
         isDragging: false
     };
     cubicData.push(data);
+    // [추가] 마우스와 터치 시작 이벤트 연결
+cubic.addEventListener('mousedown', (e) => startGrab(e, data));
+cubic.addEventListener('touchstart', (e) => startGrab(e, data), {passive: false});
 });
 
 // 애니메이션 루프 (통통 튀기)
@@ -89,6 +92,7 @@ function animate() {
         if (!data.isDragging) {
             data.x += data.vx;
             data.y += data.vy;
+            data.vx *= 0.98; // [선택 추가] 공기 저항
 
             // 벽에 부딪히면 튕기기
             if (data.x <= 0 || data.x + 35 >= rect.width) data.vx *= -1;
@@ -102,3 +106,41 @@ function animate() {
 }
 
 animate();
+
+// [추가] 잡기 시작
+function startGrab(e, data) {
+    e.preventDefault();
+    data.isDragging = true;
+    
+    const moveEvent = (e) => {
+        const rect = container.getBoundingClientRect();
+        const clientX = e.clientX || (e.touches && e.touches[0].clientX);
+        const clientY = e.clientY || (e.touches && e.touches[0].clientY);
+
+        const nextX = clientX - rect.left - 20;
+        const nextY = clientY - rect.top - 20;
+
+        // 이동 거리를 속도(vx, vy)로 변환 (던지는 힘)
+        data.vx = (nextX - data.x) * 0.6; 
+        data.vy = (nextY - data.y) * 0.6;
+
+        data.x = nextX;
+        data.y = nextY;
+
+        data.element.style.left = data.x + 'px';
+        data.element.style.top = data.y + 'px';
+    };
+
+    const upEvent = () => {
+        data.isDragging = false;
+        window.removeEventListener('mousemove', moveEvent);
+        window.removeEventListener('touchmove', moveEvent);
+        window.removeEventListener('mouseup', upEvent);
+        window.removeEventListener('touchend', upEvent);
+    };
+
+    window.addEventListener('mousemove', moveEvent);
+    window.addEventListener('touchmove', moveEvent, {passive: false});
+    window.addEventListener('mouseup', upEvent);
+    window.addEventListener('touchend', upEvent);
+}
