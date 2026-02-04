@@ -103,3 +103,39 @@
   100% { transform: translateX(-100%); } /* 전체 너비의 절반(한 뭉치)만큼만 밀면 무한 반복됨 */
 }
 
+/* 음악 버튼 */
+.music-control {
+  position: absolute;
+  top: 25px;
+  right: 25px;
+  z-index: 100;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.music-control img {
+  width: 45px;
+  height: auto;
+  filter: drop-shadow(0 0 8px #73ff6e);
+}
+
+.music-control:hover {
+  transform: scale(1.1);
+}
+
+.music-control {
+    position: absolute;
+    top: 25px; 
+    right: 25px;
+    width: 50px;  /* 영역 확보 */
+    height: 50px; /* 영역 확보 */
+    z-index: 9999 !important; /* 그 어떤 로고나 배경보다 위에 위치 */
+    cursor: pointer !important;
+    pointer-events: auto !important; /* 클릭 차단 해제 */
+}
+
+#music-btn {
+    width: 100%;
+    height: auto;
+    pointer-events: none; /* 이미지가 아니라 부모 div가 클릭을 받게 함 */
+}

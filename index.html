@@ -4,49 +4,57 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>아자아자^^</title>
+    
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="page_loading.css"> 
+
+    <script src="https://www.youtube.com/iframe_api" defer></script>
+    <script src="js/main.js" defer></script> 
 </head>
 <body>
-<div id="mobile-only-overlay">
+    <div id="mobile-only-overlay">
         <div class="message-box">
-            <h1>이 웹사이트는</h1> <h1>모바일 환경에 최적화되어 있습니다.</h1> <h1>핸드폰으로 접속해 주세요</h1>
+            <h1>이 웹사이트는</h1> 
+            <h1>모바일 환경에 최적화되어 있습니다.</h1> 
+            <h1>핸드폰으로 접속해 주세요</h1>
         </div>
     </div>
 
-    <div class="desktop-background">
-        </div>
+    <div class="desktop-background"></div>
+    
     <div class="desktop-background">
         <div class="phone-container">
-            
             <div class="intro">
                 <div class="hole"></div> 
                 <img src="asset/images/loading.gif" class="loading-img" alt="로딩 로고"> 
             </div>
-<main class="main-content">
-    <img src="asset/images/main_logo2.png" class="main-logo" alt="로고">
 
-    <div class="ear-group">
-        <img src="asset/images/ear_bg.png" class="ear-bg" alt="귀 배경">
-        <img src="asset/images/ear_sticker.png" class="main-ear" alt="귀">
-    </div>
+            <main class="main-content">
+                <div id="player"></div>
 
-    <div class="ticker-container">
-    <div class="ticker-wrapper">
-        <div class="ticker-text">
-            REST IN PIERCE • REST IN PIERCE • REST IN PIERCE • REST IN PIERCE • REST IN PIERCE • REST IN PIERCE • REST IN PIERCE • REST IN PIERCE • 
-        </div>
-        <div class="ticker-text">
-            REST IN PIERCE • REST IN PIERCE • REST IN PIERCE • REST IN PIERCE • REST IN PIERCE • REST IN PIERCE • REST IN PIERCE • REST IN PIERCE • 
+                <div class="music-control" onclick="toggleMusic()">
+                    <img src="asset/images/music_on.png" id="music-btn" alt="음악 켜기">
+                </div>
+
+                <img src="asset/images/main_logo2.png" class="main-logo" alt="로고">
+
+                <div class="ear-group">
+                    <img src="asset/images/ear_bg.png" class="ear-bg" alt="귀 배경">
+                    <img src="asset/images/ear_sticker.png" class="main-ear" alt="귀">
+                </div>
+
+                <div class="ticker-container">
+                    <div class="ticker-wrapper">
+                        <div class="ticker-text">
+                            REST IN PIERCE • REST IN PIERCE • REST IN PIERCE • REST IN PIERCE • REST IN PIERCE • REST IN PIERCE • REST IN PIERCE • REST IN PIERCE • 
+                        </div>
+                        <div class="ticker-text">
+                            REST IN PIERCE • REST IN PIERCE • REST IN PIERCE • REST IN PIERCE • REST IN PIERCE • REST IN PIERCE • REST IN PIERCE • REST IN PIERCE • 
+                        </div>
+                    </div>
+                </div>
+            </main>
         </div>
     </div>
-    
-</div>
-</main>
-            
-        </div>
-    </div>
-  
-    <script src="js/main.js"></script>
 </body>
 </html>
