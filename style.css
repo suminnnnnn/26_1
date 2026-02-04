@@ -116,7 +116,7 @@
 .music-control img {
   width: 45px;
   height: auto;
-  filter: drop-shadow(0 0 8px #73ff6e);
+  filter: drop-shadow(0 0 8px #00ffff);
 }
 
 .music-control:hover {
@@ -138,4 +138,16 @@
     width: 100%;
     height: auto;
     pointer-events: none; /* 이미지가 아니라 부모 div가 클릭을 받게 함 */
+}
+
+/* 큐빅 스타일: 로고(10)보다는 뒤에, 귀(2)보다는 앞에 배치 */
+.floating-cubic {
+  position: absolute;
+  width: 35px;         /* 큐빅 크기 */
+  height: 35px;
+  z-index: 3;          /* 귀(2) 보다는 위, 로고(10) 보다는 아래 */
+  pointer-events: auto; /* 터치/클릭 가능하게 */
+  user-select: none;
+  -webkit-user-drag: none;
+  filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.8));
 }

@@ -47,14 +47,58 @@ function toggleMusic() {
 
     if (!isPlaying) {
         player.playVideo();
-        btnImg.src = 'asset/images/music_off.png'; // 언더바 확인!
+        btnImg.src = 'asset/images/music_off.png'; 
         isPlaying = true;
-        console.log("노래 시작!");
+        console.log("노래 시작");
     } else {
         player.pauseVideo();
-        btnImg.src = 'asset/images/music_on.png'; // 언더바 확인!
+        btnImg.src = 'asset/images/music_on.png';
         isPlaying = false;
-        console.log("노래 일시정지!");
+        console.log("노래 일시정지");
     }
 }
 
+// 큐빅 데이터 초기화
+const cubics = document.querySelectorAll('.floating-cubic');
+const container = document.querySelector('.main-content');
+const containerRect = container.getBoundingClientRect();
+
+const cubicData = [];
+
+cubics.forEach((cubic) => {
+    // 1. 초기 위치를 귀 주변(중앙)으로 랜덤 배치
+    const startX = Math.random() * (containerRect.width - 40);
+    const startY = 140 + Math.random() * 300; // 귀 위치(top 140) 근처에서 시작
+
+    const data = {
+        element: cubic,
+        x: startX,
+        y: startY,
+        vx: (Math.random() - 0.5) * 5,
+        vy: (Math.random() - 0.5) * 5,
+        isDragging: false
+    };
+    cubicData.push(data);
+});
+
+// 애니메이션 루프 (통통 튀기)
+function animate() {
+    const rect = container.getBoundingClientRect();
+    
+    cubicData.forEach(data => {
+        if (!data.isDragging) {
+            data.x += data.vx;
+            data.y += data.vy;
+
+            // 벽에 부딪히면 튕기기
+            if (data.x <= 0 || data.x + 35 >= rect.width) data.vx *= -1;
+            if (data.y <= 0 || data.y + 35 >= rect.height) data.vy *= -1;
+
+            data.element.style.left = data.x + 'px';
+            data.element.style.top = data.y + 'px';
+        }
+    });
+    requestAnimationFrame(animate);
+}
+
+animate();
