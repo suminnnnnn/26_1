@@ -149,5 +149,4 @@
   pointer-events: auto; /* 터치/클릭 가능하게 */
   user-select: none;
   -webkit-user-drag: none;
-  filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.8));
 }

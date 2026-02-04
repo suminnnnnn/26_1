@@ -106,41 +106,59 @@ function animate() {
 }
 
 animate();
-
-// [추가] 잡기 시작
 function startGrab(e, data) {
     e.preventDefault();
     data.isDragging = true;
     
-    const moveEvent = (e) => {
+    // 잡는 순간 속도를 0으로 만들어서 멈추게 함
+    data.vx = 0;
+    data.vy = 0;
+
+    // 이벤트에서 좌표 추출하는 헬퍼 함수
+    const getPoint = (ev) => {
+        if (ev.touches && ev.touches.length > 0) {
+            return { x: ev.touches[0].clientX, y: ev.touches[0].clientY };
+        }
+        return { x: ev.clientX, y: ev.clientY };
+    };
+
+    const onMove = (moveEv) => {
+        if (!data.isDragging) return;
+
         const rect = container.getBoundingClientRect();
-        const clientX = e.clientX || (e.touches && e.touches[0].clientX);
-        const clientY = e.clientY || (e.touches && e.touches[0].clientY);
+        const pt = getPoint(moveEv);
 
-        const nextX = clientX - rect.left - 20;
-        const nextY = clientY - rect.top - 20;
+        // 큐빅의 중심이 마우스/손가락을 따라오도록 계산
+        const nextX = pt.x - rect.left - 20; 
+        const nextY = pt.y - rect.top - 20;
 
-        // 이동 거리를 속도(vx, vy)로 변환 (던지는 힘)
-        data.vx = (nextX - data.x) * 0.6; 
-        data.vy = (nextY - data.y) * 0.6;
+        // 던지는 힘 계산 (새 위치 - 이전 위치)
+        data.vx = (nextX - data.x) * 0.7; 
+        data.vy = (nextY - data.y) * 0.7;
 
         data.x = nextX;
         data.y = nextY;
+
+        // 화면 밖으로 나가지 않게 방지
+        data.x = Math.max(0, Math.min(rect.width - 35, data.x));
+        data.y = Math.max(0, Math.min(rect.height - 35, data.y));
 
         data.element.style.left = data.x + 'px';
         data.element.style.top = data.y + 'px';
     };
 
-    const upEvent = () => {
+    const onUp = () => {
         data.isDragging = false;
-        window.removeEventListener('mousemove', moveEvent);
-        window.removeEventListener('touchmove', moveEvent);
-        window.removeEventListener('mouseup', upEvent);
-        window.removeEventListener('touchend', upEvent);
+        // 등록했던 윈도우 이벤트들 제거
+        window.removeEventListener('mousemove', onMove);
+        window.removeEventListener('touchmove', onMove);
+        window.removeEventListener('mouseup', onUp);
+        window.removeEventListener('touchend', onUp);
     };
 
-    window.addEventListener('mousemove', moveEvent);
-    window.addEventListener('touchmove', moveEvent, {passive: false});
-    window.addEventListener('mouseup', upEvent);
-    window.addEventListener('touchend', upEvent);
+    // 윈도우 전체에 이벤트를 걸어야 마우스를 빨리 움직여도 안 놓쳐요!
+    window.addEventListener('mousemove', onMove);
+    window.addEventListener('touchmove', onMove, { passive: false });
+    window.addEventListener('mouseup', onUp);
+    window.addEventListener('touchend', onUp);
 }
