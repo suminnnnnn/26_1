@@ -1,20 +1,24 @@
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
 
+/* 1. 최상위 요소부터 스크롤 원천 차단 */
 html, body {
     width: 100%;
     height: 100%;
     margin: 0;
     padding: 0;
-    overflow: hidden; /* 스크롤바 자체를 없앰 */
-    position: fixed;  /* 화면을 바닥에 딱 붙임 */
+    overflow: hidden;    /* 넘치는 건 무조건 잘라버림 */
+    position: fixed;     /* 화면 위치를 박아버림 (스크롤 유발 방지) */
+    overscroll-behavior: none; /* 모바일 당겨서 새로고침/바운스 방지 */
 }
 
+/* 2. 메인 컨테이너도 화면 크기에 딱 맞춤 */
 .main-content {
     width: 100vw;
     height: 100vh;
     position: relative;
-    overflow: hidden; /* 내부 요소가 삐져나가도 스크롤 안 생기게 함 */
-    touch-action: none; /* 브라우저 기본 터치 액션 차단 */
+    overflow: hidden;    /* 큐빅이 화면 밖으로 나가도 스크롤 안 생기게 함 */
+    display: flex;       /* 중앙 정렬 등을 위해 권장 */
+    flex-direction: column;
 }
 
 /* [1] 기본 초기화 & 터치 최적화 */
