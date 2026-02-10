@@ -1,5 +1,22 @@
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
 
+html, body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden; /* 스크롤바 자체를 없앰 */
+    position: fixed;  /* 화면을 바닥에 딱 붙임 */
+}
+
+.main-content {
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+    overflow: hidden; /* 내부 요소가 삐져나가도 스크롤 안 생기게 함 */
+    touch-action: none; /* 브라우저 기본 터치 액션 차단 */
+}
+
 /* [1] 기본 초기화 & 터치 최적화 */
 * { 
   margin: 0; 
