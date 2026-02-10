@@ -58,94 +58,6 @@ function toggleMusic() {
     }
 }
 
-// 큐빅 데이터 초기화
-const cubics = document.querySelectorAll('.floating-cubic');
-const container = document.querySelector('.main-content');
-const containerRect = container.getBoundingClientRect();
-
-const cubicData = [];
-
-cubics.forEach((cubic) => {
-    // 1. 초기 위치를 귀 주변(중앙)으로 랜덤 배치
-    const startX = Math.random() * (containerRect.width - 40);
-    const startY = 140 + Math.random() * 300; // 귀 위치(top 140) 근처에서 시작
-
-    const data = {
-        element: cubic,
-        x: startX,
-        y: startY,
-        vx: (Math.random() - 0.5) * 4,
-        vy: (Math.random() - 0.5) * 4,
-        isDragging: false
-    };
-    cubicData.push(data);
-    // [추가] 마우스와 터치 시작 이벤트 연결
-cubic.addEventListener('mousedown', (e) => startGrab(e, data));
-cubic.addEventListener('touchstart', (e) => startGrab(e, data), {passive: false});
-});
-
-// 애니메이션 루프 (통통 튀기)
-function animate() {
-    const rect = container.getBoundingClientRect();
-    
-    cubicData.forEach(data => {
-        if (!data.isDragging) {
-            data.x += data.vx;
-            data.y += data.vy;
-            data.vx *= 0.98; // [선택 추가] 공기 저항
-
-            // 벽에 부딪히면 튕기기
-            if (data.x <= 0 || data.x + 35 >= rect.width) data.vx *= -1;
-            if (data.y <= 0 || data.y + 35 >= rect.height) data.vy *= -1;
-
-            data.element.style.left = data.x + 'px';
-            data.element.style.top = data.y + 'px';
-        }
-    });
-    requestAnimationFrame(animate);
-}
-
-animate();
-
-// [추가] 잡기 시작
-function startGrab(e, data) {
-    e.preventDefault();
-    data.isDragging = true;
-    
-    const moveEvent = (e) => {
-        const rect = container.getBoundingClientRect();
-        const clientX = e.clientX || (e.touches && e.touches[0].clientX);
-        const clientY = e.clientY || (e.touches && e.touches[0].clientY);
-
-        const nextX = clientX - rect.left - 20;
-        const nextY = clientY - rect.top - 20;
-
-        // 이동 거리를 속도(vx, vy)로 변환 (던지는 힘)
-        data.vx = (nextX - data.x) * 0.6; 
-        data.vy = (nextY - data.y) * 0.6;
-
-        data.x = nextX;
-        data.y = nextY;
-
-        data.element.style.left = data.x + 'px';
-        data.element.style.top = data.y + 'px';
-    };
-
-    const upEvent = () => {
-        data.isDragging = false;
-        window.removeEventListener('mousemove', moveEvent);
-        window.removeEventListener('touchmove', moveEvent);
-        window.removeEventListener('mouseup', upEvent);
-        window.removeEventListener('touchend', upEvent);
-    };
-
-    window.addEventListener('mousemove', moveEvent);
-    window.addEventListener('touchmove', moveEvent, {passive: false});
-    window.addEventListener('mouseup', upEvent);
-    window.addEventListener('touchend', upEvent);
-}
-
-
 // 1. 반짝이 생성 함수 (지속시간 및 크기 수정)
 function createSparkle(x, y, isClick = false) {
     const sparkle = document.createElement('div');
@@ -184,7 +96,7 @@ function createSparkle(x, y, isClick = false) {
         }
     ], {
         // [수정] 조금 더 오랫동안 머물도록 시간 설정
-        duration: isClick ? 1800 : 1500 + Math.random() * 500, 
+        duration: isClick ? 1800 : 1500 + Math.random() * 700, 
         easing: 'ease-out',
         fill: 'forwards'
     });
@@ -214,7 +126,87 @@ const handleBurst = (x, y) => {
     }
 };
 
-window.addEventListener('mousedown', (e) => handleBurst(e.clientX, e.clientY));
-window.addEventListener('touchstart', (e) => {
-    handleBurst(e.touches[0].clientX, e.touches[0].clientY);
-}, { passive: true });
+window.addEventListener('DOMContentLoaded', () => {
+    const cubics = document.querySelectorAll('.floating-cubic');
+    const container = document.querySelector('.main-content');
+    if (!cubics.length) return;
+
+    const cubicData = [];
+
+    // 1. 초기화
+    cubics.forEach((cubic) => {
+        const rect = container.getBoundingClientRect();
+        const data = {
+            element: cubic,
+            x: Math.random() * (rect.width - 50),
+            y: 150 + Math.random() * 200,
+            vx: (Math.random() - 0.5) * 2,
+            vy: (Math.random() - 0.5) * 2,
+            isDragging: false
+        };
+        cubicData.push(data);
+        
+        // [수정] 잡기 이벤트: 함수를 밖으로 빼지 않고 바로 등록
+        const startGrab = (e) => {
+            e.preventDefault();
+            data.isDragging = true;
+            data.vx = 0;
+            data.vy = 0;
+
+            const moveHandler = (moveEv) => {
+                if (!data.isDragging) return;
+                const r = container.getBoundingClientRect();
+                const cx = moveEv.clientX || (moveEv.touches && moveEv.touches[0].clientX);
+                const cy = moveEv.clientY || (moveEv.touches && moveEv.touches[0].clientY);
+
+                // 좌표를 직접 데이터에 꽂아넣기
+                data.x = cx - r.left - 25;
+                data.y = cy - r.top - 25;
+            };
+
+            const upHandler = () => {
+                data.isDragging = false;
+                // 놓을 때 다시 살짝 움직이게 속도 부여
+                data.vx = (Math.random() - 0.5) * 2;
+                data.vy = (Math.random() - 0.5) * 2;
+                window.removeEventListener('mousemove', moveHandler);
+                window.removeEventListener('touchmove', moveHandler);
+                window.removeEventListener('mouseup', upHandler);
+                window.removeEventListener('touchend', upHandler);
+            };
+
+            window.addEventListener('mousemove', moveHandler);
+            window.addEventListener('touchmove', moveHandler, { passive: false });
+            window.addEventListener('mouseup', upHandler);
+            window.addEventListener('touchend', upHandler);
+        };
+
+        cubic.addEventListener('mousedown', startGrab);
+        cubic.addEventListener('touchstart', startGrab, { passive: false });
+    });
+
+    // 2. 애니메이션 루프 (이 부분이 핵심!)
+    function render() {
+        const rect = container.getBoundingClientRect();
+        
+        cubicData.forEach(data => {
+            if (!data.isDragging) {
+                data.x += data.vx;
+                data.y += data.vy;
+
+                // 벽 충돌
+                if (data.x <= 0 || data.x + 45 >= rect.width) data.vx *= -1;
+                if (data.y <= 0 || data.y + 45 >= rect.height) data.vy *= -1;
+            }
+
+            // [핵심] 잡고 있든 아니든 무조건 스타일을 실시간 업데이트
+            data.element.style.transform = `translate(${data.x}px, ${data.y}px)`;
+            // 혹시 모르니 left/top 대신 transform을 써보세요. 훨씬 부드럽고 잘 먹힙니다.
+            data.element.style.left = '0px'; 
+            data.element.style.top = '0px';
+        });
+        
+        requestAnimationFrame(render);
+    }
+    render();
+});
