@@ -106,59 +106,115 @@ function animate() {
 }
 
 animate();
+
+// [추가] 잡기 시작
 function startGrab(e, data) {
     e.preventDefault();
     data.isDragging = true;
     
-    // 잡는 순간 속도를 0으로 만들어서 멈추게 함
-    data.vx = 0;
-    data.vy = 0;
-
-    // 이벤트에서 좌표 추출하는 헬퍼 함수
-    const getPoint = (ev) => {
-        if (ev.touches && ev.touches.length > 0) {
-            return { x: ev.touches[0].clientX, y: ev.touches[0].clientY };
-        }
-        return { x: ev.clientX, y: ev.clientY };
-    };
-
-    const onMove = (moveEv) => {
-        if (!data.isDragging) return;
-
+    const moveEvent = (e) => {
         const rect = container.getBoundingClientRect();
-        const pt = getPoint(moveEv);
+        const clientX = e.clientX || (e.touches && e.touches[0].clientX);
+        const clientY = e.clientY || (e.touches && e.touches[0].clientY);
 
-        // 큐빅의 중심이 마우스/손가락을 따라오도록 계산
-        const nextX = pt.x - rect.left - 20; 
-        const nextY = pt.y - rect.top - 20;
+        const nextX = clientX - rect.left - 20;
+        const nextY = clientY - rect.top - 20;
 
-        // 던지는 힘 계산 (새 위치 - 이전 위치)
-        data.vx = (nextX - data.x) * 0.7; 
-        data.vy = (nextY - data.y) * 0.7;
+        // 이동 거리를 속도(vx, vy)로 변환 (던지는 힘)
+        data.vx = (nextX - data.x) * 0.6; 
+        data.vy = (nextY - data.y) * 0.6;
 
         data.x = nextX;
         data.y = nextY;
-
-        // 화면 밖으로 나가지 않게 방지
-        data.x = Math.max(0, Math.min(rect.width - 35, data.x));
-        data.y = Math.max(0, Math.min(rect.height - 35, data.y));
 
         data.element.style.left = data.x + 'px';
         data.element.style.top = data.y + 'px';
     };
 
-    const onUp = () => {
+    const upEvent = () => {
         data.isDragging = false;
-        // 등록했던 윈도우 이벤트들 제거
-        window.removeEventListener('mousemove', onMove);
-        window.removeEventListener('touchmove', onMove);
-        window.removeEventListener('mouseup', onUp);
-        window.removeEventListener('touchend', onUp);
+        window.removeEventListener('mousemove', moveEvent);
+        window.removeEventListener('touchmove', moveEvent);
+        window.removeEventListener('mouseup', upEvent);
+        window.removeEventListener('touchend', upEvent);
     };
 
-    // 윈도우 전체에 이벤트를 걸어야 마우스를 빨리 움직여도 안 놓쳐요!
-    window.addEventListener('mousemove', onMove);
-    window.addEventListener('touchmove', onMove, { passive: false });
-    window.addEventListener('mouseup', onUp);
-    window.addEventListener('touchend', onUp);
+    window.addEventListener('mousemove', moveEvent);
+    window.addEventListener('touchmove', moveEvent, {passive: false});
+    window.addEventListener('mouseup', upEvent);
+    window.addEventListener('touchend', upEvent);
 }
+
+
+// 1. 반짝이 생성 함수 (지속시간 및 크기 수정)
+function createSparkle(x, y, isClick = false) {
+    const sparkle = document.createElement('div');
+    sparkle.className = 'sparkle';
+    document.body.appendChild(sparkle);
+
+    const offsetX = (Math.random() - 0.5) * 20;
+    const offsetY = (Math.random() - 0.5) * 20;
+    sparkle.style.left = (x + offsetX - 6) + 'px';
+    sparkle.style.top = (y + offsetY - 6) + 'px';
+
+    const size = isClick ? (Math.random() * 12 + 10) : (Math.random() * 8 + 6);
+    sparkle.style.width = size + 'px';
+    sparkle.style.height = size + 'px';
+
+    const spread = isClick ? 80 : 30;
+    const destX = (Math.random() - 0.5) * spread; 
+    const destY = (Math.random() - 0.5) * spread;
+
+    // [수정] 회전 각도를 줄여서 더 우아하게 (180도 -> 60도~90도)
+    const randomRotation = Math.random() * 60 + 30; 
+
+    const animation = sparkle.animate([
+        { 
+            transform: 'translate(0, 0) scale(0) rotate(0deg)', 
+            opacity: 0 
+        },
+        { 
+            transform: 'translate(0, 0) scale(1.1) rotate(20deg)', 
+            opacity: 1,
+            offset: 0.15 
+        },
+        { 
+            transform: `translate(${destX}px, ${destY}px) scale(0) rotate(${randomRotation}deg)`, 
+            opacity: 0 
+        }
+    ], {
+        // [수정] 조금 더 오랫동안 머물도록 시간 설정
+        duration: isClick ? 1800 : 1500 + Math.random() * 500, 
+        easing: 'ease-out',
+        fill: 'forwards'
+    });
+
+    animation.onfinish = () => sparkle.remove();
+}
+
+// 2. 드래그/마우스 이동 시 (더 많이 생성되도록 확률 조정)
+window.addEventListener('mousemove', (e) => {
+    // [피드백 반영] 0.7 -> 0.3으로 낮춰서 훨씬 자주 생성 (숫자가 낮을수록 많이 나옴)
+    if (Math.random() > 0.2) { 
+        createSparkle(e.clientX, e.clientY);
+    }
+});
+
+window.addEventListener('touchmove', (e) => {
+    if (Math.random() > 0.2) {
+        createSparkle(e.touches[0].clientX, e.touches[0].clientY);
+    }
+}, { passive: true });
+
+// 3. 클릭/터치 시 (드래그와 같은 느낌으로 뭉텅이 생성)
+const handleBurst = (x, y) => {
+    // [피드백 반영] 한 번에 15개 정도 생성해서 풍성하게
+    for (let i = 0; i < 15; i++) {
+        createSparkle(x, y, true);
+    }
+};
+
+window.addEventListener('mousedown', (e) => handleBurst(e.clientX, e.clientY));
+window.addEventListener('touchstart', (e) => {
+    handleBurst(e.touches[0].clientX, e.touches[0].clientY);
+}, { passive: true });
