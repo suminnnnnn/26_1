@@ -100,7 +100,6 @@ html, body {
 #music-btn {
   width: 100%;
   height: auto;
-  filter: drop-shadow(0 0 8px #00ffff);
   pointer-events: none;
 }
 
