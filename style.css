@@ -55,15 +55,24 @@ html, body {
   pointer-events: none; /* 로고 뒤의 큐빅을 잡을 수 있게 설정 */
 }
 
-/* [5] 귀 세트 (z-index: 1~2) */
+/* [5] 귀 세트 수정 */
 .ear-group {
-  top: 140px;
+  position: absolute;
+  top: 57%;             /* 화면 높이의 50% 지점 */
+  left: 50%;            /* 화면 너비의 50% 지점 */
+  /* transform에서 translateX(-50%) 대신 translate(-50%, -50%)를 사용하여 완벽한 중앙 정렬 */
+  transform: translate(-50%, -50%); 
+  
   width: 90%;
   max-width: 380px;
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 2;           /* 필요에 따라 조절하세요 */
 }
+
+/* 아래 코드는 지워주세요! (중복되는 속성) */
+/* .ear-group { top: 140px; } */
 
 .ear-bg { width: 100%; z-index: 1; }
 
